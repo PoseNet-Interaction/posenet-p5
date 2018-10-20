@@ -10,7 +10,7 @@ export default async function( sketch ) {
         width = document.getElementById('sketch').clientWidth;
         height = document.getElementById('sketch').clientHeight;
         sketch.createCanvas(width, height);
-        sketch.frameRate(0.25);
+        sketch.frameRate(3);
     }
 
     sketch.draw = async function() {
@@ -26,8 +26,8 @@ export default async function( sketch ) {
             // per object
             for (var j=0; j<posenetCoord[i]['keypoints'].length; j++) {
                 // per point
-                var x = posenetCoord[i]['keypoints'][j]['position']['x']
-                var y = posenetCoord[i]['keypoints'][j]['position']['y']
+                var x = (posenetCoord[i]['keypoints'][j]['position']['x']/300)*2560
+                var y = (posenetCoord[i]['keypoints'][j]['position']['y']/200)*1600
                 //sketch.fill('red');
                 sketch.ellipse(x, y, 10,10);
             }
@@ -43,8 +43,8 @@ export default async function( sketch ) {
         let nmsRadius = 20;
   
         let videoElement = document.getElementById('videoElement');
-        videoElement.width = 1050;
-        videoElement.height = 900;
+        videoElement.width = 300;
+        videoElement.height = 200;
 
         let net = await posenet.load();
         return await net.estimateMultiplePoses(
