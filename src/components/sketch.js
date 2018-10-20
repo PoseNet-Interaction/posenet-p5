@@ -1,4 +1,5 @@
 import * as posenet from '@tensorflow-models/posenet';
+import 'p5/lib/addons/p5.dom';
 
 export default async function( sketch ) {
 
@@ -6,17 +7,19 @@ export default async function( sketch ) {
     var height = 0;
     
     sketch.setup = async function() {
-        width = document.getElementById('target-multi').clientWidth;
-        height = document.getElementById('target-multi').clientHeight;
-        console.log(width, height);
-        console.log(document.getElementById('sketch').width);
+        width = document.getElementById('sketch').clientWidth;
+        height = document.getElementById('sketch').clientHeight;
         sketch.createCanvas(width, height);
+        sketch.frameRate(0.25);
+    }
+
+    sketch.draw = async function() {
+        sketch.background(0)
 
         var posenetCoord = await detectWithTensor();
-        /* eslint-disable no-console */
-        console.log(posenetCoord);
-        console.log(typeof(posenetCoord));
-        /* eslint-disable no-console */
+        /* eslint.disable no-console */
+        console.log(posenetCoord)
+        /* eslint.disable no-console */
         sketch.fill('red');
 
         for (var i=0; i<posenetCoord.length; i++) {
@@ -25,22 +28,10 @@ export default async function( sketch ) {
                 // per point
                 var x = posenetCoord[i]['keypoints'][j]['position']['x']
                 var y = posenetCoord[i]['keypoints'][j]['position']['y']
-                console.log(x,y);
                 //sketch.fill('red');
                 sketch.ellipse(x, y, 10,10);
             }
         }
-    }
-
-    sketch.draw = async function() {
-        //sketch.fill(0);
-        //sketch.ellipse(sketch.random(0,width), sketch.random(0,height), 10,10);
-    }
-
-    sketch.windowResized = function() {
-        width = document.getElementById('sketch').clientWidth;
-        height = document.getElementById('sketch').clientHeight;
-        sketch.resizeCanvas(width, height);
     }
 
     async function detectWithTensor() {
@@ -51,10 +42,13 @@ export default async function( sketch ) {
         let scoreThreshold = 0.5;
         let nmsRadius = 20;
   
-        let imageElementMulti = document.getElementById('target-multi');
+        let videoElement = document.getElementById('videoElement');
+        videoElement.width = 1050;
+        videoElement.height = 900;
+
         let net = await posenet.load();
         return await net.estimateMultiplePoses(
-          imageElementMulti, imageScaleFactor, flipHorizontal, outputStride, maxPoseDetections, scoreThreshold, nmsRadius);
+            videoElement, imageScaleFactor, flipHorizontal, outputStride, maxPoseDetections, scoreThreshold, nmsRadius);
       }
 
 }
