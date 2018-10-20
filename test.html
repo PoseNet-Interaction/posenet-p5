@@ -267,10 +267,12 @@ var raw = [{"score": 0.7501773168058956, "keypoints": [
 
 
 function same_pos(bounding_x, bounding_y, pos_data){
+    // 같은 포즈를 찾기 위해서 각 좌표(nose, leftAnkle, rightAnkle 등)이서 bounding box 의 좌표를 빼는 함수
+    // return : dict, {'nose': {'x' : -27.08784, 'y' : -345.0238}}
     let info = {}
 
     pos_data = pos_data['keypoints']
-
+으
     for (let i in pos_data){
         temp = pos_data[i]
         if (!(temp['part'] in info)) {
@@ -284,10 +286,9 @@ function same_pos(bounding_x, bounding_y, pos_data){
 }
 
 
-function compare_pose(person_1, person_2, threshold_x, threshold_y, same_pose) {
-	if (typeof same_pose == 'undefined' || (same_pose != null && same_pose.hasOwnProperty ("__kwargtrans__"))) {;
-		var same_pose = false;
-	};
+function compare_pose(person_1, person_2, threshold_x, threshold_y, same_pose=false) {
+    // 겹치는 부분이 있는지 확인, +threshold_x, -threshold_x, +threshold_y, -threshold_y 까지 확인
+    // return True or False
 	var check_x = 0;
 	var check_y = 0;
 
@@ -312,7 +313,7 @@ function compare_pose(person_1, person_2, threshold_x, threshold_y, same_pose) {
 			return false;
 		}
 	}
-	if (check_x == len (person_1) && check_y == len (person_1)) {
+	if (check_x == len(person_1) && check_y == len(person_1)) {
 		return true;
 	}
 	else {
@@ -327,7 +328,6 @@ person_1 = same_pos(bounding_x, bounding_y, raw[0])
 person_2 = same_pos(bounding_x, bounding_y, raw[1])
 console.log(person_1, person_2)
 
-// compare_pose(me, me2, 0,0)
 console.log(compare_pose(person_1, person_2, 3, 3));
 
 </script>
