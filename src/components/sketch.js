@@ -1,15 +1,23 @@
 import * as posenet from '@tensorflow-models/posenet';
+import 'p5/lib/addons/p5.dom';
 
 export default async function( sketch ) {
 
     var width = 0;
     var height = 0;
-    
+    var video;
+
     sketch.setup = async function() {
-        width = document.getElementById('target-multi').clientWidth;
-        height = document.getElementById('target-multi').clientHeight;
+        width = sketch.windowWidth;
+        height = sketch.windowHeight;
+
+        // width = document.getElementById('target-multi').clientWidth;
+        // height = document.getElementById('target-multi').clientHeight;
+
+        /* eslint-disable no-console */
         console.log(width, height);
         console.log(document.getElementById('sketch').width);
+        /* eslint-disable no-console */
         sketch.createCanvas(width, height);
 
         var posenetCoord = await detectWithTensor();
@@ -30,9 +38,12 @@ export default async function( sketch ) {
                 sketch.ellipse(x, y, 10,10);
             }
         }
+        video = sketch.createCapture(sketch.VIDEO);
+        video.size(width, height);
     }
 
     sketch.draw = async function() {
+
         //sketch.fill(0);
         //sketch.ellipse(sketch.random(0,width), sketch.random(0,height), 10,10);
     }
