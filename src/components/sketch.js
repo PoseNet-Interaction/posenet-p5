@@ -10,7 +10,7 @@ export default async function( sketch ) {
         width = document.getElementById('sketch').clientWidth;
         height = document.getElementById('sketch').clientHeight;
         sketch.createCanvas(width, height);
-        sketch.frameRate(0.25);
+        sketch.frameRate(0.75);
     }
 
     sketch.draw = async function() {
@@ -20,7 +20,8 @@ export default async function( sketch ) {
         /* eslint.disable no-console */
         console.log(posenetCoord)
         /* eslint.disable no-console */
-        sketch.fill('red');
+        sketch.fill(255,0,0,75);
+        sketch.strokeWeight(0);
 
         for (var i=0; i<posenetCoord.length; i++) {
             // per object
@@ -29,7 +30,7 @@ export default async function( sketch ) {
                 var x = posenetCoord[i]['keypoints'][j]['position']['x']
                 var y = posenetCoord[i]['keypoints'][j]['position']['y']
                 //sketch.fill('red');
-                sketch.ellipse(x, y, 10,10);
+                sketch.ellipse(x, y, 50,50);
             }
         }
     }
@@ -43,7 +44,7 @@ export default async function( sketch ) {
         let nmsRadius = 20;
   
         let videoElement = document.getElementById('videoElement');
-        videoElement.width = 1050;
+        videoElement.width = 1400;
         videoElement.height = 900;
 
         let net = await posenet.load();
