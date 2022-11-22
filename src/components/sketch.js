@@ -10,27 +10,24 @@ export default async function( sketch ) {
         width = document.getElementById('sketch').clientWidth;
         height = document.getElementById('sketch').clientHeight;
         sketch.createCanvas(width, height);
-        sketch.frameRate(0.75);
+        sketch.frameRate(4);
     }
 
     sketch.draw = async function() {
-        sketch.background(0)
+        sketch.background(0);
 
         var posenetCoord = await detectWithTensor();
-        /* eslint.disable no-console */
-        console.log(posenetCoord)
-        /* eslint.disable no-console */
-        sketch.fill(255,0,0,75);
+        sketch.fill(255,0,0,125);
         sketch.strokeWeight(0);
 
         for (var i=0; i<posenetCoord.length; i++) {
             // per object
             for (var j=0; j<posenetCoord[i]['keypoints'].length; j++) {
                 // per point
-                var x = posenetCoord[i]['keypoints'][j]['position']['x']
-                var y = posenetCoord[i]['keypoints'][j]['position']['y']
+                var x = (posenetCoord[i]['keypoints'][j]['position']['x']/300)*1200
+                var y = (posenetCoord[i]['keypoints'][j]['position']['y']/200)*800
                 //sketch.fill('red');
-                sketch.ellipse(x, y, 50,50);
+                sketch.ellipse(x, y, 25,25);
             }
         }
     }
@@ -44,8 +41,8 @@ export default async function( sketch ) {
         let nmsRadius = 20;
   
         let videoElement = document.getElementById('videoElement');
-        videoElement.width = 1400;
-        videoElement.height = 900;
+        videoElement.width = 300;
+        videoElement.height = 200;
 
         let net = await posenet.load();
         return await net.estimateMultiplePoses(
